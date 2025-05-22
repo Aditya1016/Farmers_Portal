@@ -22,10 +22,10 @@ const userSchema = new Schema(
             minLength: [6, "Password must be at least 6 characters long"],
         },
         location:{
-            ltd:{
+            latitude:{
                 type: Number
             },
-            lng: {
+            longitude: {
                 type: Number
             }
         },

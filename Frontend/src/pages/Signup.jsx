@@ -11,10 +11,12 @@ const Signup = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    const response = await axios.post("http://localhost:5500/api/v1/auth/sign-up", {
+    const response = await axios.post(`${import.meta.env.BACKEND_URL}/api/v1/auth/sign-up`, {
       name,
       email,
       password
+    },{
+      withCredentials: true
     });
 
     if(response.data.success){

@@ -79,7 +79,11 @@ export const signIn = async (req, res, next) => {
             message: "User signed in successfully",
             data: {
                 token,
-                user
+                user:{
+                    name: user.name,
+                    email: user.email,
+                    id: user._id,
+                }
             }
         })
     } catch (error) {

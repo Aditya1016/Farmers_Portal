@@ -16,10 +16,18 @@ const app = express()
 import helmet from 'helmet';
 app.use(helmet());
 
+const allowedOrigins = CORS_ORIGIN.split(',');
+
 app.use(cors({
-    origin: CORS_ORIGIN,
-    credentials: true
-}))
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 
 import morgan from 'morgan';
 

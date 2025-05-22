@@ -9,13 +9,16 @@ const Signin = () => {
   const navigate = useNavigate();
   const submitHandler = async (e) => {
     e.preventDefault();
-
-    const response = await axios.post("http://localhost:5500/api/v1/auth/sign-in", {
+    console.log(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/sign-in`);
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/sign-in`, {
       email,
       password
+    },{
+      withCredentials: true
     })
 
     if(response.data.success){
+      localStorage.setItem("userId", response.data.user.id);
       navigate("/dashboard");
     }
   };

@@ -166,7 +166,7 @@ export const setUserLocation = async (req, res, next) => {
     }
 }
 
-export const getUserProfile = async (req, res, next) => {
+export const getUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user._id).select("-password -refreshToken");
 
@@ -174,8 +174,8 @@ export const getUserProfile = async (req, res, next) => {
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
-        res.status(200).json({ success: true, user });
+        return res.status(200).json({ success: true, user });
     } catch (error) {
-        next(error);
+        return res.status(500).json({ success: false, message: "Internal server error", error: error.message });
     }
 }

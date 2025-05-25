@@ -11,6 +11,7 @@ const App = () => {
   useEffect(() => {
     getCurrentUser()
       .then((userData) => {
+        console.log("User data fetched:", userData);
         if (userData) {
           dispatch(login({ userData }));
         } else {
@@ -31,7 +32,7 @@ const App = () => {
       <Outlet />
     </main>
   ) : (
-    <div>Loading...</div>
+    <div className="text-white">Loading...</div>
   );
 };
 

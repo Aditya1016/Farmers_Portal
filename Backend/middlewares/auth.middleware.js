@@ -6,7 +6,7 @@ export const authorize = async(req, res, next) => {
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
     
         if (!token) {
-            throw new Error("Unauthorised request")          
+            return res.status(401).json({ message: "Access token is required" });       
         }
     
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -14,7 +14,7 @@ export const authorize = async(req, res, next) => {
         const user = await User.findById(decodedToken?._id).select("-password -refreshToken")
     
         if (!user) {
-            throw new Error("Invalid Access token")
+            return res.status(401).json({ message: "User not found" });
         }
         
         req.user = user;

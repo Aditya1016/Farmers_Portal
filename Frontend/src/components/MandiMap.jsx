@@ -65,7 +65,7 @@ const Map = (id) => {
     );
 
     return () => navigator.geolocation.clearWatch(watchId);
-  }, []);
+  }, [id.id]);
 
   useEffect(() => {
     if (map.current || !location.latitude || !location.longitude) return;

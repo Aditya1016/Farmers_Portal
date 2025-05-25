@@ -15,6 +15,8 @@ import BioWasteManagement from "./pages/BioWasteManagement.jsx";
 import { Provider } from "react-redux";
 import store from "./store/store.js";
 import Protected from "./components/AuthLayout.jsx";
+import MerchantSignUp from "./pages/MerchantSignUp.jsx";
+import MerchantSignIn from "./pages/MerchantSignIn.jsx";
 
 const router = createBrowserRouter([
   {
@@ -80,11 +82,19 @@ const router = createBrowserRouter([
             <BioWasteManagement />
           </Protected>
         )
+      },
+      {
+        path: '/merchants/signup',
+        element: (
+            <MerchantSignUp />
+        )
+      },
+      {
+        path: '/merchants/signin',
+        element: (
+            <MerchantSignIn />
+        )
       }
-      // {
-      //   path: "/livetracking",
-      //   element: <LiveTracking />
-      // }
     ],
   },
 ]);

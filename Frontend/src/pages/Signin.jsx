@@ -1,26 +1,30 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getCurrentUser, loginUser } from "../services/auth";
+import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+import { login as authLogin } from "../store/authSlice";
 
 const Signin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
-  const submitHandler = async (e) => {
-    e.preventDefault();
+  const dispatch = useDispatch();
+  const { register, handleSubmit } = useForm();
+  const [error, setError] = useState("");
 
-    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/sign-in`, {
-      email,
-      password
-    },{
-      withCredentials: true
-    })
+  const login = async (data) => {
+    setError("");
 
-
-    if(response.data.success){
-      localStorage.setItem("userId", response.data.data.user.id);
-      navigate("/dashboard");
+    try {
+      const response = await loginUser(data);
+      if (response.status === 201) {
+        const userData = await getCurrentUser();
+        if (userData) {
+          dispatch(authLogin(userData));
+        }
+        navigate("/");
+      }
+    } catch (error) {
+      setError(error.message);
     }
   };
 
@@ -31,45 +35,32 @@ const Signin = () => {
       </div>
       <div className="right h-full md:w-1/2 bg-blue-100 flex justify-center items-center">
         <div className="bg-white p-5 shadow-custom-dark rounded-mb-6 rounded-lg flex justify-center">
-          <form action="submit" className="w-full max-w-sm p-4">
-            <div className="flex flex-col mb-4">
-              <label className="font-general text-md mb-2" htmlFor="email">
-                Email
-              </label>
+          <form onSubmit={handleSubmit(login)} className="mt-8">
+            <div className="space-y-5">
               <input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="p-2 mt-1 border-b border-gray-300 rounded"
+                label="Email: "
                 placeholder="Enter your email"
+                type="email"
+                {...register("email", {
+                  required: true,
+                  validate: {
+                    matchPattern: (value) =>
+                      /^([\w.\-_]+)?\w+@[\w-_]+(\.\w+){1,}$/.test(value) ||
+                      "Email address must be valid",
+                  },
+                })}
               />
-            </div>
-
-            <div className="flex flex-col mb-8">
-              <label className="font-general text-md mb-2" htmlFor="password">
-                Password
-              </label>
               <input
+                label="Password: "
                 type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="p-2 mt-1 border-b border-gray-300 rounded"
                 placeholder="Enter your password"
+                {...register("password", {
+                  required: true,
+                })}
               />
-            </div>
-
-            <div className="flex flex-col justify-center items-center gap-2 font-robert-medium mt-4">
-              <button
-                className="bg-blue-500 text-white p-2 rounded"
-                onClick={(e) => submitHandler(e)}
-              >
-                Signin
+              <button type="Submit" className="w-full">
+                Sign In
               </button>
-              <p className="text-sm">Don&apos;t have an account? <Link to={'/signup'} className="text-red-500">SignUp</Link></p>
             </div>
           </form>
         </div>

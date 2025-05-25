@@ -1,27 +1,22 @@
-import axios from "axios";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { createUser } from "../services/auth";
 const Signup = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { register, handleSubmit } = useForm();
+  const [error, setError] = useState("");
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
+  const create = async (data) => {
+    setError("");
 
-    const response = await axios.post(`${import.meta.env.BACKEND_URL}/api/v1/auth/sign-up`, {
-      name,
-      email,
-      password
-    },{
-      withCredentials: true
-    });
+    const response = await createUser(data);
 
-    if(response.data.success){
+    if (response.status === 201) {
       navigate("/signin");
-    }  
+    } else {
+      setError("Failed to create account");
+    }
   };
   return (
     <div className="h-screen w-screen flex flex-col md:flex-row justify-between">
@@ -30,60 +25,39 @@ const Signup = () => {
       </div>
       <div className="right h-full md:w-1/2 bg-blue-100 flex justify-center items-center">
         <div className="bg-white shadow-custom-dark rounded-mb-6 rounded-lg flex justify-center p-5 ">
-          <form action="submit" className="w-full max-w-sm p-4">
-            <div className="flex flex-col mb-4">
-              <label className="font-general text-lg mb-2" htmlFor="email">
-                Name
-              </label>
+          <form onSubmit={handleSubmit(create)}>
+            <div className="space-y-5">
               <input
-                type="text"
-                id="name"
-                name="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="p-2 mt-1 border-b border-gray-300 rounded"
-                placeholder="Enter your email"
+                label="Name: "
+                placeholder="Enter your name"
+                {...register("name", {
+                  required: true,
+                })}
               />
-            </div>
-
-            <div className="flex flex-col mb-4">
-              <label className="font-general text-lg mb-2" htmlFor="email">
-                Email
-              </label>
               <input
+                label="Email: "
+                placeholder="Enter your email"
                 type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="p-2 mt-1 border-b border-gray-300 rounded"
-                placeholder="Enter your email"
+                {...register("email", {
+                  required: true,
+                  validate: {
+                    matchPattern: (value) =>
+                      /^([\w\.\-_]+)?\w+@[\w-_]+(\.\w+){1,}$/.test(value) ||
+                      "Email address must be valid",
+                  },
+                })}
               />
-            </div>
-
-            <div className="flex flex-col mb-8">
-              <label className="font-general text-lg mb-2" htmlFor="password">
-                Password
-              </label>
               <input
+                label="Password: "
                 type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="p-2 mt-1 border-b border-gray-300 rounded"
                 placeholder="Enter your password"
+                {...register("password", {
+                  required: true,
+                })}
               />
-            </div>
-
-            <div className="flex flex-col justify-center items-center gap-2 font-robert-medium mt-4">
-              <button
-                className="bg-blue-500 text-white p-2 rounded"
-                onClick={(e) => submitHandler(e)}
-              >
-                Signup
+              <button type="Submit" className="w-full">
+                Create Account
               </button>
-              <p className="text-sm">Already have an account? <Link to={"/signin"} className="text-red-500">SignIn</Link></p>
             </div>
           </form>
         </div>

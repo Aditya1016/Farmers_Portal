@@ -1,44 +1,27 @@
-import { JWT_SECRET } from "../config/env.js";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
-const authorize = async (req, res, next) => {
+export const authorize = async(req, _, next) => {
     try {
-        let token;
-
-        if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-            token = req.headers.authorization.split(' ')[1];
-        } else if (req.cookies.token) {
-            token = req.cookies.token;
+        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
+    
+        if (!token) {
+            throw new Error("Unauthorised request")
         }
-
-        if(!token) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized"
-            })
+    
+        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        
+        const user = await User.findById(decodedToken?._id).select("-password -refreshToken")
+    
+        if (!user) {
+            throw new Error("Invalid Access token")
         }
-
-        const decoded = jwt.verify(token, JWT_SECRET);
-
-        const user = await User.findById(decoded.userId);
-
-        if(!user) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized"
-            })
-        }
-
+        
         req.user = user;
         next();
     } catch (error) {
-        res.status(401).json({
-            success: false,
-            message: "Unauthorized",
-            error: error.message
-        })
+        const err = new Error(error?.message || "Invalid access token");
+        err.statusCode = 401;
+        next(err);
     }
 }
-
-export default authorize

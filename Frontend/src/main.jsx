@@ -12,6 +12,9 @@ import SoilClassificatio from "./pages/SoilClassificatio.jsx";
 import Emandi from "./pages/Emandi.jsx";
 import PlantDiseaseDetection from "./pages/PlantDiseaseDetection.jsx";
 import BioWasteManagement from "./pages/BioWasteManagement.jsx";
+import { Provider } from "react-redux";
+import store from "./store/store.js";
+import Protected from "./components/AuthLayout.jsx";
 
 const router = createBrowserRouter([
   {
@@ -24,31 +27,59 @@ const router = createBrowserRouter([
       },
       {
         path: "/signin",
-        element: <Signin />,
+        element: (
+          <Protected authentication={false}>
+            <Signin />
+          </Protected>
+        ),
       },
       {
         path: "/signup",
-        element: <Signup />,
+        element: (
+          <Protected authentication={false}>
+            <Signup />
+          </Protected>
+        ),
       },
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: (
+          <Protected authentication>
+            <Dashboard />
+          </Protected>
+        ),
       },
       {
         path: '/soil-classification',
-        element: <SoilClassificatio />
+        element: (
+          <Protected authentication>
+            <SoilClassificatio />
+          </Protected>
+        ),
       },
       {
         path: '/e-mandi',
-        element: <Emandi />
+        element: (
+          <Protected authentication>
+            <Emandi />
+          </Protected>
+        ),
       },
       {
         path: '/plant-disease-detection',
-        element: <PlantDiseaseDetection />
+        element: (
+          <Protected authentication>
+            <PlantDiseaseDetection />
+          </Protected>
+        ),
       },
       {
         path: '/biowaste-management',
-        element: <BioWasteManagement />
+        element: (
+          <Protected authentication>
+            <BioWasteManagement />
+          </Protected>
+        )
       }
       // {
       //   path: "/livetracking",
@@ -60,6 +91,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-      <RouterProvider router={router} />
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
   </StrictMode>
 );

@@ -3,17 +3,16 @@ import * as maptilersdk from "@maptiler/sdk";
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import axios from "axios";
 
-const Map = () => {
+const Map = (id) => {
   const [location, setLocation] = useState({ latitude: 0, longitude: 0 });
   const mapContainer = useRef(null);
   const map = useRef(null);
   const marker = useRef(null);
   const zoom = 14;
-  const lastSentTime = useRef(0);
 
   maptilersdk.config.apiKey = import.meta.env.VITE_MAPTILER_API_KEY;
 
-  // Fly to updated location
+  
   const flyToLocation = useCallback(() => {
     if (map.current) {
       map.current.flyTo({
@@ -24,7 +23,6 @@ const Map = () => {
     }
   }, [location.latitude, location.longitude]);
 
-  // Watch for location updates in real-time
   useEffect(() => {
     if (!("geolocation" in navigator)) {
       console.error("Geolocation is not supported.");
@@ -38,27 +36,23 @@ const Map = () => {
 
         setLocation({ latitude: lat, longitude: lon });
 
-        // Move marker on map
         if (marker.current) {
           marker.current.setLngLat([lon, lat]);
         }
 
-        // Update backend every 10 seconds max
-        const now = Date.now();
-        if (now - lastSentTime.current > 10000) {
-          lastSentTime.current = now;
-
-          const userId = localStorage.getItem("userId");
-          if (userId) {
-            axios
-              .patch(`http://localhost:5500/api/v1/users/set-location`, {
-                id: userId,
-                latitude: lat,
-                longitude: lon,
-              })
-              .catch((err) => console.error("Failed to update location", err));
-          }
-        }
+        axios
+          .patch(
+            "http://localhost:5500/api/v1/users/set-location",
+            {
+              latitude: lat,
+              longitude: lon,
+              id: id.id,
+            },
+            {
+              withCredentials: true,
+            }
+          )
+          .catch((err) => console.error("Failed to update location", err));
       },
       (err) => {
         console.error("Error watching location", err);
@@ -73,7 +67,6 @@ const Map = () => {
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
-  // Initialize the map and marker
   useEffect(() => {
     if (map.current || !location.latitude || !location.longitude) return;
 

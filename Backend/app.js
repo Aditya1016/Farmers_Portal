@@ -47,7 +47,7 @@ app.use(cookieParser())
 app.set('trust proxy', 1);
 
 app.use(errorMiddleware);
-// app.use(arcjetMiddleware)
+app.use(arcjetMiddleware)
 
 app.use('/api/v1/users', userRouter);
 

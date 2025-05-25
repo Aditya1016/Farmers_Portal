@@ -9,7 +9,6 @@ const Emandi = () => {
     navigate("/signin");
   }
 
-  console.log("User data in Emandi:", user.user._id);
   return (
     <div className="w-full h-full">
         <MandiMap id={user.user._id} />

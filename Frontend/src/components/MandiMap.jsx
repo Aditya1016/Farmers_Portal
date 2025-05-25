@@ -42,7 +42,7 @@ const Map = (id) => {
 
         axios
           .patch(
-            "http://localhost:5500/api/v1/users/set-location",
+            `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/set-location`,
             {
               latitude: lat,
               longitude: lon,

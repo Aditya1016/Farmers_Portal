@@ -17,10 +17,15 @@ const App = () => {
           dispatch(logout());
         }
       })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+        dispatch(logout());
+      })
       .finally(() => {
         setLoading(false);
       });
   }, [dispatch]);
+
   return !loading ? (
     <main>
       <Outlet />

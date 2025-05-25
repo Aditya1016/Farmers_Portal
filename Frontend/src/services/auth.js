@@ -1,6 +1,6 @@
 import axios from 'axios';
 export const getCurrentUser = async () => {
-    const response = await axios.get(`http://localhost:5500/api/v1/users/profile`,{
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/profile`,{
         withCredentials: true
     })
 

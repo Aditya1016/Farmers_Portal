@@ -32,6 +32,7 @@ app.use(cors({
 }));
 
 import morgan from 'morgan';
+import merchantRouter from './routes/user.routes.js'
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
@@ -47,9 +48,10 @@ app.use(cookieParser())
 app.set('trust proxy', 1);
 
 app.use(errorMiddleware);
-app.use(arcjetMiddleware)
+// app.use(arcjetMiddleware)
 
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/merchants', merchantRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello World')

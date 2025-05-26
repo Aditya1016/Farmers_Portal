@@ -1,6 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 import jwt from "jsonwebtoken";
-import { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRY } from "../config/env.js";
+import {
+  ACCESS_TOKEN_SECRET,
+  ACCESS_TOKEN_EXPIRY,
+  REFRESH_TOKEN_SECRET,
+  REFRESH_TOKEN_EXPIRY
+} from "../config/env.js";
+
 const userSchema = new Schema(
   {
     name: {
@@ -22,13 +28,12 @@ const userSchema = new Schema(
       required: [true, "Please add a password"],
       minLength: [6, "Password must be at least 6 characters long"],
     },
+    phoneNumber: {
+      type: String, 
+    },
     location: {
-      latitude: {
-        type: Number,
-      },
-      longitude: {
-        type: Number,
-      },
+      latitude: Number,
+      longitude: Number,
     },
     socketId: {
       type: String,
@@ -36,19 +41,22 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
+    role: {
+      type: String,
+      enum: ["user", "merchant"],
+      default: "user",
+    },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
+// Common token generation
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
       email: this.email,
-      username: this.username,
-      fullName: this.fullName,
+      role: this.role,
     },
     ACCESS_TOKEN_SECRET,
     {
@@ -68,6 +76,6 @@ userSchema.methods.generateRefreshToken = function () {
     }
   );
 };
-const User = mongoose.model("User", userSchema);
 
+const User = mongoose.model("User", userSchema);
 export default User;

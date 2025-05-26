@@ -1,11 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 const Navbar = () => {
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.userData);
+
   return (
     <div className="flex justify-between items-center px-5 py-2">
       <div>
         <img
-          src="https://static.vecteezy.com/system/resources/previews/023/654/784/non_2x/golden-logo-template-free-png.png"
+          src="/icons/logo.png"
           alt="logo"
+          onClick={() => {
+            navigate("/");
+          }}
           className="size-12 bg-transparent rounded-full object-cover cursor-pointer hover:scale-110 transition-transform duration-300 ease-in-out"
         />
       </div>
@@ -15,11 +23,17 @@ const Navbar = () => {
             About Us
           </li>
           <li className="text-white cursor-pointer px-3 rounded-xl hover:bg-slate-100 hover:scale-105 transition-transform duration-300 ease-in-out hover:text-black">
-            <Link to={"/merchants/signin"}>Want to Sell?</Link>
+            {user ? (
+              <Link to={"/"}>Home</Link>
+            ) : (
+              <Link to={"/merchants/signin"}>Want to Sell?</Link>
+            )}
           </li>
-          <li className="bg-green-300 hover:bg-green-500 hover:text-white px-4 rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
-            <Link to={"/signin"}>Sign In</Link>
-          </li>
+          {!user && (
+            <li className="bg-green-300 hover:bg-green-500 hover:text-white px-4 rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
+              <Link to={"/signin"}>Sign In</Link>
+            </li>
+          )}
         </ul>
       </div>
     </div>

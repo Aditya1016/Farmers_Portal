@@ -21,7 +21,7 @@ const Signin = () => {
         if (userData) {
           dispatch(authLogin(userData));
         }
-        navigate("/");
+        navigate("/dashboard");
       }
     } catch (error) {
       setError("Failed to sign in");

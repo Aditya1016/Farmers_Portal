@@ -21,7 +21,7 @@ const Signup = () => {
   return (
     <div className="h-screen w-screen flex md:flex-row flex-col justify-between">
       <div className="left text-3xl font-circular-web md:w-1/2 h-1/3 md:h-full bg-yellow-300 flex justify-center items-center">
-        SignIn
+        SignUp
       </div>
       <div className="right h-full md:w-1/2 bg-blue-100 flex justify-center items-center">
         <div className="bg-white p-5 shadow-custom-dark rounded-mb-6 rounded-lg flex justify-center">

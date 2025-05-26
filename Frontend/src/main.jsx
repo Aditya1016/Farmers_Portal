@@ -17,6 +17,7 @@ import store from "./store/store.js";
 import Protected from "./components/AuthLayout.jsx";
 import MerchantSignUp from "./pages/MerchantSignUp.jsx";
 import MerchantSignIn from "./pages/MerchantSignIn.jsx";
+import MerchantDashboard from "./pages/MerchantDashboard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -86,13 +87,25 @@ const router = createBrowserRouter([
       {
         path: '/merchants/signup',
         element: (
-            <MerchantSignUp />
+            <Protected authentication={false}>
+                <MerchantSignUp />
+            </Protected>
         )
       },
       {
         path: '/merchants/signin',
         element: (
-            <MerchantSignIn />
+            <Protected authentication={false}>
+                <MerchantSignIn />
+            </Protected>
+        )
+      },
+      {
+        path: '/merchants/dashboard',
+        element: (
+            <Protected authentication>
+                <MerchantDashboard />
+            </Protected>
         )
       }
     ],

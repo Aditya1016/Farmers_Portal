@@ -3,6 +3,8 @@ import { Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "./services/auth";
 import { login, logout } from "./store/authSlice";
+import Navbar from "./components/Navbar"; 
+import Loading from "./pages/Loading";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -28,10 +30,11 @@ const App = () => {
 
   return !loading ? (
     <main>
+      <Navbar />
       <Outlet />
     </main>
   ) : (
-    <div className="text-white">Loading...</div>
+    <Loading />
   );
 };
 

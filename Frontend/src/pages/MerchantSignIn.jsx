@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getCurrentUser, loginUser } from "../services/auth";
+import { getCurrentUser, loginMerchant } from "../services/auth";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { login as authLogin } from "../store/authSlice";
@@ -15,13 +15,13 @@ const Signin = () => {
     setError("");
 
     try {
-      const response = await loginUser(data);
+      const response = await loginMerchant(data);
       if (response.status === 201) {
         const userData = await getCurrentUser();
         if (userData) {
           dispatch(authLogin(userData));
         }
-        navigate("/");
+        navigate("/merchants/dashboard");
       }
     } catch (error) {
       setError("Failed to sign in");
@@ -32,7 +32,7 @@ const Signin = () => {
   return (
     <div className="h-screen w-screen flex md:flex-row flex-col justify-between">
       <div className="left text-3xl font-circular-web md:w-1/2 h-1/3 md:h-full bg-yellow-300 flex justify-center items-center">
-        SignIn
+        Merchant SignIn
       </div>
       <div className="right h-full md:w-1/2 bg-blue-100 flex justify-center items-center">
         <div className="bg-white p-5 shadow-custom-dark rounded-mb-6 rounded-lg flex justify-center">

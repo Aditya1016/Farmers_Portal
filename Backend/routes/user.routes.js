@@ -1,14 +1,16 @@
 import { Router } from "express";
-import { setUserLocation, userLogout, userSignIn, userSignUp, getUserProfile } from "../controllers/user.controller.js";
+import { userSignUp, userSignIn, userLogout, getUserProfile } from "../controllers/user.controller.js";
 import {authorize} from "../middlewares/auth.middleware.js";
+import { setUserLocation } from "../controllers/location.controller.js";
 
 const userRouter = Router();
 
 userRouter.post('/sign-up', userSignUp);
 userRouter.post('/sign-in', userSignIn);
-userRouter.post('/sign-out', userLogout)
+userRouter.post('/sign-out', authorize, userLogout);
 
-userRouter.patch("/set-location", authorize, setUserLocation)
-userRouter.get('/profile', authorize, getUserProfile);
+userRouter.get('/profile', authorize, getUserProfile)
 
-export default userRouter
+userRouter.patch('/set-location', authorize, setUserLocation);
+
+export default userRouter;

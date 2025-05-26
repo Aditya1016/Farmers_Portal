@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { logoutUser } from "../services/auth";
 import { logout } from "../store/authSlice";
 import Loading from "../pages/Loading";
@@ -10,6 +10,10 @@ const Navbar = () => {
   const user = useSelector((state) => state.auth.userData);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("User data in Navbar:", user);
+  }, [user]);
   const handleLogout = async () => {
     setLoading(true);
     try {
@@ -18,7 +22,6 @@ const Navbar = () => {
       if (response && response.status === 200) {
         dispatch(logout());
         navigate("/");
-        window.location.reload();
       }
     } catch (error) {
       console.error("Logout error:", error);

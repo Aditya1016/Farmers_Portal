@@ -18,8 +18,6 @@ app.use(helmet());
 
 const allowedOrigins = CORS_ORIGIN.split(',');
 
-console.log("Allowed Origins: ", allowedOrigins)
-
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {

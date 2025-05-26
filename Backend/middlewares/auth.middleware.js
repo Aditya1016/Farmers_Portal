@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 
 export const authorize = async(req, res, next) => {
     try {
+        console.log(res.cookies)
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
     
         if (!token) {

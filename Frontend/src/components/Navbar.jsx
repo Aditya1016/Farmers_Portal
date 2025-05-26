@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { logoutUser } from "../services/auth";
 import { logout } from "../store/authSlice";
 import Loading from "../pages/Loading";
@@ -11,9 +11,6 @@ const Navbar = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log("User data in Navbar:", user);
-  }, [user]);
   const handleLogout = async () => {
     setLoading(true);
     try {

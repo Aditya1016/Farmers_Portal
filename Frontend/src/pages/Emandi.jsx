@@ -11,7 +11,7 @@ const Emandi = () => {
 
   return (
     <div className="w-full h-full">
-        <MandiMap id={user.user._id} />
+        <MandiMap id={user?.user?._id} />
     </div>
   )
 }

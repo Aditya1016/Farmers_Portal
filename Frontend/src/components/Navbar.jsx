@@ -1,11 +1,34 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { logoutUser } from "../services/auth";
+import { logout } from "../store/authSlice";
+import Loading from "../pages/Loading";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const user = useSelector((state) => state.userData);
-
-  return (
+  const user = useSelector((state) => state.auth.userData);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      const response = await logoutUser();
+      console.log("Logout response:", response);
+      if (response && response.status === 200) {
+        dispatch(logout());
+        navigate("/");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  return loading ? (
+    <Loading />
+  ) : (
     <div className="flex justify-between items-center px-5 py-2">
       <div>
         <img
@@ -24,7 +47,9 @@ const Navbar = () => {
           </li>
           <li className="text-white cursor-pointer px-3 rounded-xl hover:bg-slate-100 hover:scale-105 transition-transform duration-300 ease-in-out hover:text-black">
             {user ? (
-              <Link to={"/"}>Home</Link>
+              <div className="text-red-400" onClick={handleLogout}>
+                Sign Out
+              </div>
             ) : (
               <Link to={"/merchants/signin"}>Want to Sell?</Link>
             )}

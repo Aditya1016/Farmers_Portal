@@ -1,3 +1,4 @@
+import { NODE_ENV } from "../config/env.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
@@ -87,10 +88,12 @@ export const userSignIn = async (req, res, next) => {
       "-password -refreshToken"
     );
 
+    const isProduction = NODE_ENV === "production";
+
     const options = {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: isProduction,
+      sameSite: isProduction ? "None" : "Lax",
       maxAge: 24 * 60 * 60 * 1000,
     };
 

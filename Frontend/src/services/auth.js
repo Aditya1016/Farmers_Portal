@@ -1,7 +1,7 @@
 import axios from 'axios';
 export const getCurrentUser = async () => {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/profile`,{
+        const response = await axios.get(`http://localhost:5500/api/v1/users/profile`,{
             withCredentials: true
         })
 
@@ -21,12 +21,11 @@ export const getCurrentUser = async () => {
 export const loginUser = async (data) => {
     try {
         const { email, password } = data;
-        console.log("Login data:", data);
         if (!email || !password) {
             throw new Error('Email and password are required');
         }
     
-        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/sign-in`, {
+        const response = await axios.post(`http://localhost:5500/api/v1/users/sign-in`, {
           email,
           password
         },{
@@ -73,7 +72,7 @@ export const createUser = async (data) => {
 export const logoutUser = async () => {
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/sign-out`,
+            `http://localhost:5500/api/v1/users/sign-out`,
             {},
             { withCredentials: true }
         );

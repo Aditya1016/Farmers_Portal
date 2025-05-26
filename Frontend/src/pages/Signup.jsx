@@ -30,15 +30,15 @@ const Signup = () => {
               <div className="flex flex-col gap-4">
                 <label className="font-robert-regular text-lg">Name: </label>
                 <input
-                  placeholder="Enter your email"
-                  type="email"
+                  placeholder="Enter your name"
+                  type="text"
                   className="border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none"
-                  {...register("email", {
+                  {...register("name", {
                     required: true,
                     validate: {
                       matchPattern: (value) =>
-                        /^([\w.\-_]+)?\w+@[\w-_]+(\.\w+){1,}$/.test(value) ||
-                        "Email address must be valid",
+                        /^[a-zA-Z\s]+$/.test(value) ||
+                        "Name must contain only letters and spaces",
                     },
                   })}
                 />

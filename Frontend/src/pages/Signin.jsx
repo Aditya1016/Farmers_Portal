@@ -4,17 +4,19 @@ import { getCurrentUser, loginUser } from "../services/auth";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { login as authLogin } from "../store/authSlice";
+import Loading from "./Loading";
 
 const Signin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const login = async (data) => {
     setError("");
 
     try {
+      setLoading(true);
       const response = await loginUser(data);
       if (response.status === 201) {
         const userData = await getCurrentUser();
@@ -26,10 +28,12 @@ const Signin = () => {
     } catch (error) {
       setError("Failed to sign in");
       console.error("Login error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
+  return loading ? <Loading /> : ((
     <div className="h-screen w-screen flex md:flex-row flex-col justify-between">
       <div className="left text-3xl font-circular-web md:w-1/2 h-1/3 md:h-full bg-yellow-300 flex justify-center items-center">
         SignIn
@@ -88,7 +92,7 @@ const Signin = () => {
         </div>
       </div>
     </div>
-  );
+  ))
 };
 
 export default Signin;

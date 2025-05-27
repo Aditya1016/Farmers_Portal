@@ -26,11 +26,16 @@ const Navbar = () => {
       setLoading(false);
     }
   };
+
+  const handleDropdown = () => {
+    console.log("Dropdown clicked");
+  }
+  
   return loading ? (
     <Loading />
   ) : (
     <div className="flex justify-between items-center px-5 py-2">
-      <div>
+      <div className="flex justify-center items-center space-x-2 cursor-pointer">
         <img
           src="/icons/logo.png"
           alt="logo"
@@ -39,15 +44,16 @@ const Navbar = () => {
           }}
           className="size-12 bg-transparent rounded-full object-cover cursor-pointer hover:scale-110 transition-transform duration-300 ease-in-out"
         />
+        <h1 className="text-green-300 text-2xl font-robert-medium hover:scale-105 transition-transform duration-300 ease-in-out">Farmify</h1>
       </div>
-      <div>
+      <div className="desktop-menu sm:flex hidden">
         <ul className="flex space-x-5 px-2 text-lg font-circular-web">
           <li className="text-white cursor-pointer hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out">
             About Us
           </li>
           <li className="text-white cursor-pointer px-3 rounded-xl hover:bg-slate-100 hover:scale-105 transition-transform duration-300 ease-in-out hover:text-black">
             {user ? (
-              <div className="text-red-400" onClick={handleLogout}>
+              <div className="text-red-400 hover:text-red-600" onClick={handleLogout}>
                 Sign Out
               </div>
             ) : (
@@ -60,6 +66,9 @@ const Navbar = () => {
             </li>
           )}
         </ul>
+      </div>
+      <div className="mobile-menu sm:hidden" onClick={handleDropdown}>
+          <img className="size-7" src="/icons/menu.png" alt="" />
       </div>
     </div>
   );

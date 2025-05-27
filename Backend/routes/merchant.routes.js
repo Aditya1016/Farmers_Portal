@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { getUserProfile, merchantLogout, merchantSignIn, merchantSignUp } from "../controllers/user.controller";
-import { authorize } from "../middlewares/auth.middleware";
-import { setUserLocation } from "../controllers/location.controller";
+import { getUserProfile, merchantLogout, merchantSignIn, merchantSignUp } from "../controllers/user.controller.js";
+import { authorize } from "../middlewares/auth.middleware.js";
+import { setUserLocation } from "../controllers/location.controller.js";
 
 const merchantRouter = Router();
 

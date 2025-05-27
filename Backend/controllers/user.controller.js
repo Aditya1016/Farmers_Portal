@@ -185,6 +185,7 @@ export const merchantSignUp = async (req, res) => {
       password: hashedPassword,
       phoneNumber,
       role: "merchant",
+      status: "inactive",
     });
 
     console.log("New User Created: ", user);
@@ -269,6 +270,7 @@ export const merchantLogout = async (req, res, next) => {
         $unset: {
           refreshToken: 1,
         },
+        status: "inactive",
       },
       {
         new: true,

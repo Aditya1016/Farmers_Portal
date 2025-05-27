@@ -46,6 +46,10 @@ const userSchema = new Schema(
       enum: ["user", "merchant"],
       default: "user",
     },
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+    },
   },
   { timestamps: true }
 );

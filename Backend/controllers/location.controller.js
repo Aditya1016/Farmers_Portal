@@ -37,3 +37,17 @@ export const setUserLocation = async (req, res, next) => {
   }
 };
 
+export const fetchMerchantsInTheVicinity = async (ltd, lng, radius) => {
+    const merchants = await User.find({
+        role: 'merchant',
+        location: {
+            $geoWithin: {
+                $centerSphere: [[ltd, lng], radius / 6371]
+            }
+        },
+        status: 'active'
+    });
+
+    return merchants;
+}
+

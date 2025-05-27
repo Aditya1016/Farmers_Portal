@@ -6,7 +6,7 @@ import app from './app.js';
 import { PORT } from './config/env.js';
 import { initializeSocket } from './socket.js';
 
-const port = PORT || 3000;
+const port = PORT || 5500;
 
 import http from 'http';
 
